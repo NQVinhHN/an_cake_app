@@ -1,11 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
+import '../../translations/locale_keys.g.dart';
 import '../login_screen/login_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -17,16 +23,14 @@ class HomeScreen extends StatelessWidget {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage('background_home_screen.jpg'),
+                  image: AssetImage('assets/background_home_screen.jpg'),
                 ),
               ),
               height: size.height,
               width: size.width,
               child: Column(
                 children: [
-                  SizedBox(
-                    height: size.height / 2,
-                    width: size.width,
+                  Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 50.0, vertical: 100),
@@ -39,17 +43,15 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    height: size.height / 2,
-                    width: size.width,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage('cake_home_screen.jpg'),
-                      ),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(250),
-                        topRight: Radius.circular(250),
+                  Expanded(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage('assets/cake_home_screen.jpg'),
+                        ),
+                        borderRadius: BorderRadius.vertical(
+                            top: Radius.elliptical(360, 180)),
                       ),
                     ),
                   ),
@@ -71,13 +73,16 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Get.to(
-                    const LoginScreen(),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LoginScreen(),
+                    ),
                   );
                 },
-                child: const Text(
-                  "Let's Try",
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  LocaleKeys.hs_lets_try_text.tr(),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             ),

@@ -1,6 +1,14 @@
+import 'package:an_cake_app/event/notification_api.dart';
+import 'package:an_cake_app/utils/helper_widget.dart';
 import 'package:an_cake_app/views/login_screen/login_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
+import '../../../../theme/theme_manager.dart';
+import '../../../../translations/locale_keys.g.dart';
+import '../../../user_detail_screen/user_detail_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -9,10 +17,15 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
+ThemeManager _themeManager = ThemeManager();
+
 class _SettingsScreenState extends State<SettingsScreen> {
-  bool value = false;
+  bool turnOffNoti = false;
+  bool changTheme = false;
   @override
   Widget build(BuildContext context) {
+    var provider = Provider.of<ThemeManager>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -20,10 +33,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Row(
-                children: const [
+                children: [
                   Text(
-                    'Settings',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    LocaleKeys.ss_settings_title.tr(),
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 30,
+                        color: Colors.indigo),
                   ),
                 ],
               ),
@@ -36,166 +52,296 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      children: const [
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const UserDetailScreen(),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              LocaleKeys.ss_my_account.tr(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.cyan),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    addDividerTrans(),
+                    Row(
+                      children: [
                         Text(
-                          "Language",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                          LocaleKeys.ss_change_to_dark_themes.tr(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.purpleAccent),
                         ),
                         Spacer(),
+                        Switch(
+                            value: provider.themeDark,
+                            activeColor: Colors.pink,
+                            inactiveThumbColor: Colors.teal,
+                            inactiveTrackColor: Colors.teal.withOpacity(0.5),
+                            onChanged: (value) {
+                              setState(() {
+                                provider.changeSwitch();
+                              });
+                            })
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [],
+                    ),
+                    Row(
+                      children: [
                         Text(
-                          "View All",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
-                    SizedBox(
-                      height: 50,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.grey[300]),
-                              ),
-                              onPressed: () {},
-                              child: const Text(
-                                "English",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all(Colors.grey[300]),
-                              ),
-                              onPressed: () {},
-                              child: const Text(
-                                "Vietnamese",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Text(
-                            "My Account",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
-                    Row(
-                      children: [
-                        const Text(
-                          "Change to dark themes",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
+                          LocaleKeys.ss_turn_off_notification.tr(),
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                              color: Colors.orange),
                         ),
                         const Spacer(),
-                        Switch(
-                          value: value,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              value = newValue;
-                            });
-                          },
-                          activeColor: Colors.pinkAccent,
-                        ),
+                        TextButton(
+                            onPressed: () {
+                              NotificationApi.cancelAll();
+                            },
+                            child: Icon(
+                              Icons.remove_circle_rounded,
+                              size: 30,
+                              color: Colors.pink,
+                            )),
                       ],
                     ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
+                    addDividerTrans(),
                     Row(
                       children: [
-                        const Text(
-                          "Turn off all notifications",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                        const Spacer(),
-                        Switch(
-                          value: value,
-                          onChanged: (bool newValue) {
-                            setState(() {
-                              value = newValue;
-                            });
-                          },
-                          activeColor: Colors.pinkAccent,
-                        ),
-                      ],
-                    ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
-                    Row(
-                      children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Text(
-                            "Technical Support",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  title: Text(
+                                    LocaleKeys.ss_al_contact.tr(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30,
+                                        color: Colors.blueAccent),
+                                  ),
+                                  content: SizedBox(
+                                    height: 70,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${LocaleKeys.ss_al_name.tr()}Nguyen Quoc Vinh',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.deepPurpleAccent),
+                                        ),
+                                        addDividerTrans(),
+                                        Text(
+                                          '${LocaleKeys.ss_al_phone.tr()}+84393682399',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.deepPurpleAccent),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.indigoAccent),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Text(
+                              LocaleKeys.ss_technical_support.tr(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.lime),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
+                    addDividerTrans(),
                     Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Text(
-                            "Delete My Account",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  title: Text(
+                                    LocaleKeys.ss_delete_my_account.tr(),
+                                    style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: Text(
+                                    LocaleKeys.ss_al2_quotes.tr(),
+                                    style: TextStyle(
+                                        color: Colors.deepPurpleAccent,
+                                        fontSize: 20),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        LocaleKeys.ss_al2_cancel.tr(),
+                                        style: TextStyle(
+                                            color: Colors.indigoAccent,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.indigoAccent,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Text(
+                              LocaleKeys.ss_delete_my_account.tr(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.amber),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
+                    addDividerTrans(),
                     Row(
                       children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: const Text(
-                            "About Us",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                  title: Text(
+                                    LocaleKeys.ss_about_us.tr(),
+                                    style: TextStyle(
+                                        color: Colors.blueAccent,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  content: SizedBox(
+                                    height: 180,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${LocaleKeys.ss_al_name.tr()}An Cake Bakery',
+                                          style: TextStyle(
+                                              color: Colors.deepPurpleAccent,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          '${LocaleKeys.ss_al3_owner.tr()} Binh Pham - An Le',
+                                          style: TextStyle(
+                                              color: Colors.deepPurpleAccent,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          '${LocaleKeys.ss_al3_version.tr()}  0.0.0.1',
+                                          style: TextStyle(
+                                              color: Colors.deepPurpleAccent,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          '${LocaleKeys.ss_al3_address.tr()}  ...',
+                                          style: TextStyle(
+                                              color: Colors.deepPurpleAccent,
+                                              fontSize: 20),
+                                        ),
+                                        Text(
+                                          '${LocaleKeys.ss_al_phone.tr()}...',
+                                          style: TextStyle(
+                                              color: Colors.deepPurpleAccent,
+                                              fontSize: 20),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.indigoAccent,
+                                            fontSize: 18),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                            child: Text(
+                              LocaleKeys.ss_about_us.tr(),
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.indigo),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const Divider(
-                      color: Colors.transparent,
-                    ),
+                    addDividerTrans(),
                     SizedBox(
                       height: 60,
                       child: Row(
@@ -207,10 +353,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 backgroundColor: MaterialStateProperty.all(
                                     Colors.pinkAccent),
                               ),
-                              onPressed: () {
-                                Get.to(const LoginScreen());
+                              onPressed: () async {
+                                await signOut();
                               },
-                              child: const Text("Sign Out"),
+                              child: Text(
+                                LocaleKeys.ss_sign_out.tr(),
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -222,8 +374,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ],
         ),
-        backgroundColor: Colors.grey[300],
       ),
     );
+  }
+
+  Future signOut() async {
+    await FirebaseAuth.instance.signOut().then(
+          (value) => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginScreen(),
+            ),
+          ),
+        );
   }
 }

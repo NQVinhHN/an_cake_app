@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>954304976743-ni729ogdl64u98gp8ekakgr4o5jcifsh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.954304976743-ni729ogdl64u98gp8ekakgr4o5jcifsh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCsFd6rKfdZbUDGR6qMC_KqqQsHiVgUgwQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>954304976743</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.anCakeApp</string>
+	<key>PROJECT_ID</key>
+	<string>fir-auth-app-ef056</string>
+	<key>STORAGE_BUCKET</key>
+	<string>fir-auth-app-ef056.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:954304976743:ios:93b49c9737446fbdeac1c2</string>
+</dict>
+</plist>

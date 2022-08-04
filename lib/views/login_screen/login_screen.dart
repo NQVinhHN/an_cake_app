@@ -1,3 +1,4 @@
+import 'package:an_cake_app/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'components/lower_half_body.dart';
@@ -10,13 +11,10 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey[200],
         body: Column(
-          children: const [
+          children: [
             UpperHalfBodyLS(),
-            Divider(
-              color: Colors.transparent,
-            ),
+            addDividerTrans(),
             LowerHalfBodyLS(),
           ],
         ),

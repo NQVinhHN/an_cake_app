@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../utils/helper_widget.dart';
+
 class UpperHalfBodyLS extends StatelessWidget {
   const UpperHalfBodyLS({
     Key? key,
@@ -73,9 +75,7 @@ class UpperHalfBodyLS extends StatelessWidget {
                           color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Divider(
-                    color: Colors.transparent,
-                  ),
+                  addDividerTrans(),
                   ElevatedButton(
                     style: ButtonStyle(
                       minimumSize: MaterialStateProperty.all(

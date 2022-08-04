@@ -1,11 +1,13 @@
+import 'package:an_cake_app/utils/helper_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../models/cake_list_product.dart';
 
 class CakeListProductWidget extends StatelessWidget {
-  const CakeListProductWidget({
+  CakeListProductWidget({
     Key? key,
   }) : super(key: key);
+  final cakeList = CakeListProvider().cakeList;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +32,13 @@ class CakeListProductWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              addVerticalSpace(10),
               Text(
                 cakeList[index].name,
+                style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.cyan),
               )
             ],
           );
